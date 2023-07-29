@@ -1,0 +1,184 @@
+= Diagram
+
+.Main
+[plantuml]
+....
+class Main <<Control>> {
+  - Game
+  ---
+  + get_player_info( _color )
+  + _on_new_button_pressed()
+  + _on_game_color_count_changed( white_count, black_count )
+  + _on_game_turn_changed( _color )
+}
+class ColorRect <<(C,white)ColorRect>> {
+  * color
+}
+class Container <<(C,white)HBoxContainer>> {}
+class InformationBar <<(C,white)VBoxContainer>> {}
+package "PlayerInformation" as PlayerInformation1 {
+  class Player <<PanelContainer>> {
+    - WhiteImage
+    - BlackImage
+    - SELECTED_BG_COLOR
+    * player_name
+    * disk_color
+    * disk_count
+    * selected
+    * default_bg_color
+    ---
+    + _ready()
+    + setup( _name, _color, _count )
+    + set_player_name( _name )
+    + set_disk_color( _color )
+    + change_disk_count( _count )
+    + change_selected( _bool )
+  }
+}
+package "PlayerInformation" as PlayerInformation2 {
+  class CPU <<PanelContainer>> {
+    - WhiteImage
+    - BlackImage
+    - SELECTED_BG_COLOR
+    * player_name
+    * disk_color
+    * disk_count
+    * selected
+    * default_bg_color
+    ---
+    + _ready()
+    + setup( _name, _color, _count )
+    + set_player_name( _name )
+    + set_disk_color( _color )
+    + change_disk_count( _count )
+    + change_selected( _bool )
+  }
+}
+class GameContainer <<(C,white)CenterContainer>> {}
+Package "Game" as GameScene {
+  class Game <<Control>> {
+    ~ color_count_changed
+    ~ turn_changed
+    ~ all_animation_finished
+    ---
+    - DiskScene
+    - MAX_LOCATION_NUMBER
+    * current_color
+    * animation_disks
+    ---
+    + _ready()
+    + initialize()
+    + place( location)
+    + put( location, color )
+    + clear_disks()
+    + get_disks()
+    + get_disk( location )
+    + get_color_count(color )
+    + invalid_place( location, color )
+    + already_placed( location )
+    + out_of_range( location )
+    + reversible_count( location, color )
+    + try_reverse_by( disk )
+    + reversible_disks_by( disk )
+    + directional_locations_from( base)
+    + locations_line_from( base, dx, dy )
+    + set_current_color( _color )
+    + take_turn()
+    + emit_signal_color_count_changed()
+    + _on_board_clicked( location )
+    + _on_disk_animation_finished()
+    + _on_all_animation_finished()
+  }
+}
+class NavigationBar <<(C,white)VBoxContainer>> {}
+class NewButton <<(C,white)Button>> {
+  ~ pressed
+}
+
+left to right direction
+
+Main --o ColorRect
+Main --o Container
+Container --o InformationBar
+InformationBar --o Player
+InformationBar --o CPU
+Container --o GameContainer
+GameContainer --o Game
+Container --o NavigationBar
+NavigationBar --o NewButton
+
+Main::_on_game_color_count_changed <-[#blue,thickness=2]- Game::color_count_changed
+Main::_on_game_turn_changed <-[#blue,thickness=2]- Game::turn_changed
+
+Main::_on_new_button_pressed <-[#blue,thickness=2]- NewButton::pressed
+....
+
+
+.Game
+[plantuml]
+....
+class Game <<Control>> {
+  ~ color_count_changed
+  ~ turn_changed
+  ~ all_animation_finished
+  ---
+  - DiskScene
+  - MAX_LOCATION_NUMBER
+  * current_color
+  * animation_disks
+  ---
+  + _ready()
+  + initialize()
+  + place( location)
+  + put( location, color )
+  + clear_disks()
+  + get_disks()
+  + get_disk( location )
+  + get_color_count(color )
+  + invalid_place( location, color )
+  + already_placed( location )
+  + out_of_range( location )
+  + reversible_count( location, color )
+  + try_reverse_by( disk )
+  + reversible_disks_by( disk )
+  + directional_locations_from( base)
+  + locations_line_from( base, dx, dy )
+  + set_current_color( _color )
+  + take_turn()
+  + emit_signal_color_count_changed()
+  + _on_board_clicked( location )
+  + _on_disk_animation_finished()
+  + _on_all_animation_finished()
+}
+class Board <<Polygon2D>> {
+  ~ clicked
+  ---
+  * texture
+  * repeat
+  ---
+  + _input( event )
+  + calc_location( postion )
+}
+package "Disk" as DiskScene {
+  class Disk <<AnimatedSprite2D>> {
+    ~ animation_finished
+    ---
+    - COLOR
+    * color
+    * location
+    ---
+    + set_location( _location )
+    + change_color( _color )
+    + reverse()
+    + _on_animation_finished()
+  }
+}
+
+left to right direction
+
+Game --o Board
+Board --o Disk
+
+Game::_on_board_clicked <-[#blue,thickness=2]- Board::clicked
+Game::_on_disk_animation_finished <-[#blue,thickness=2]- Disk::animation_finished
+....
