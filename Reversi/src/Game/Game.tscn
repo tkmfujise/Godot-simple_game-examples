@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://dedl5efd6q0wy"]
+
+[ext_resource type="Script" path="res://src/Game/Game.gd" id="1_b7wpn"]
+[ext_resource type="Texture2D" uid="uid://g0rc84d5im6p" path="res://assets/Board.png" id="2_02u86"]
+[ext_resource type="Script" path="res://src/Game/Board.gd" id="3_ch3ta"]
+[ext_resource type="PackedScene" uid="uid://cf6bmk20c4yv2" path="res://src/Disk/Disk.tscn" id="3_xa2p5"]
+
+[node name="Game" type="Control"]
+custom_minimum_size = Vector2(512, 512)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 512.0
+offset_bottom = 512.0
+script = ExtResource("1_b7wpn")
+
+[node name="Board" type="Polygon2D" parent="."]
+texture_repeat = 2
+texture = ExtResource("2_02u86")
+polygon = PackedVector2Array(0, 1, 0, 513, 512, 513, 512, 1)
+script = ExtResource("3_ch3ta")
+
+[node name="Disk" parent="Board" instance=ExtResource("3_xa2p5")]
+location = Vector2i(4, 4)
+
+[node name="Disk2" parent="Board" instance=ExtResource("3_xa2p5")]
+color = 1
+location = Vector2i(4, 5)
+
+[node name="Disk3" parent="Board" instance=ExtResource("3_xa2p5")]
+location = Vector2i(5, 5)
+
+[node name="Disk4" parent="Board" instance=ExtResource("3_xa2p5")]
+color = 1
+location = Vector2i(5, 4)
+
+[connection signal="all_animation_finished" from="." to="." method="_on_all_animation_finished"]
+[connection signal="clicked" from="Board" to="." method="_on_board_clicked"]
