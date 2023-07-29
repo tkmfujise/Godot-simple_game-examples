@@ -1,13 +1,13 @@
 # Reversi
 
-<img src="doc/Screenshot.png", width=600px>
+<img src="doc/Screenshot.png" width=600px>
 
 ## Architecture
 
-**Main.tscn**
+### Class diagram
 
-<img src="doc/Main_class_diagram.png", width=600px>
+**Main.tscn**
+<img src="doc/Main_class_diagram.png" width=600px>
 
 **Game.tscn**
-
-<img src="doc/Game_class_diagram.png", width=600px>
+<img src="doc/Game_class_diagram.png" width=600px>
