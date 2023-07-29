@@ -12,7 +12,6 @@ var animation_disks : Array[Node] = []
 
 
 func _ready() -> void:
-    all_animation_finished.connect(take_turn)
     initialize()
 
 
@@ -170,8 +169,9 @@ func _on_board_clicked(location: Vector2i) -> void:
 func _on_disk_animation_finished() -> void:
     animation_disks = animation_disks.filter(
         func(c): return c.frame != 0)
-    if !animation_disks: emit_signal("all_animation_finished")
+    if not animation_disks: emit_signal("all_animation_finished")
 
 
 func _on_all_animation_finished() -> void:
     emit_signal_color_count_changed()
+    take_turn()

@@ -10,6 +10,7 @@ const SELECTED_BG_COLOR = Color("#fffa63")
 @export var selected : bool : set = change_selected
 var default_bg_color : Color
 
+
 func _ready() -> void:
     default_bg_color = self_modulate
 
