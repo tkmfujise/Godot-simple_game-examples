@@ -42,14 +42,14 @@ grow_vertical = 2
 layout_mode = 2
 alignment = 1
 
-[node name="Player" parent="Container/InformationBar" instance=ExtResource("3_r0av5")]
-layout_mode = 2
-player_name = "Player"
-disk_count = 2
-
-[node name="CPU" parent="Container/InformationBar" instance=ExtResource("3_r0av5")]
+[node name="White" parent="Container/InformationBar" instance=ExtResource("3_r0av5")]
 layout_mode = 2
 player_name = "CPU"
+disk_count = 2
+
+[node name="Black" parent="Container/InformationBar" instance=ExtResource("3_r0av5")]
+layout_mode = 2
+player_name = "Player"
 disk_color = 1
 disk_count = 2
 

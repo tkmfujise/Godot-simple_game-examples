@@ -8,6 +8,7 @@ class Test_initialize:
 
     func before_each():
         game = Game.instantiate()
+        game.setup_cpu(CPU)
 
     func test_disks():
         assert_eq(game.get_disks().size(), 4)
@@ -20,17 +21,17 @@ class Test_initialize:
             [Vector2i(5, 4), Disk.COLOR.BLACK],
             ]
         )
-        game.place(Vector2i(3, 5))
+        game.place(Vector2i(3, 4))
         assert_eq(game.get_disks().size(), 5)
-        game.initialize()
+        game.initialize(Disk.COLOR.BLACK)
         assert_eq(game.get_disks().size(), 4)
 
     func test_current_color():
-        assert_eq(game.current_color, Disk.COLOR.WHITE)
-        game.take_turn()
         assert_eq(game.current_color, Disk.COLOR.BLACK)
-        game.initialize()
+        game.take_turn()
         assert_eq(game.current_color, Disk.COLOR.WHITE)
+        game.initialize(Disk.COLOR.WHITE)
+        assert_eq(game.current_color, Disk.COLOR.BLACK)
 
 
 class Test_place:
@@ -43,7 +44,7 @@ class Test_place:
         game = Game.instantiate()
 
     func test_valid():
-        game.place(Vector2i(3, 5))
+        game.place(Vector2i(3, 4))
         assert_eq(game.get_disks().size(), 5)
 
     func test_invalid_as_out_of_range():

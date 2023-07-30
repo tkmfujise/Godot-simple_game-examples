@@ -17,7 +17,7 @@ class ColorRect <<(C,white)ColorRect>> {
 class Container <<(C,white)HBoxContainer>> {}
 class InformationBar <<(C,white)VBoxContainer>> {}
 package "PlayerInformation" as PlayerInformation1 {
-  class Player <<PanelContainer>> {
+  class White <<PanelContainer>> {
     - WhiteImage
     - BlackImage
     - SELECTED_BG_COLOR
@@ -36,7 +36,7 @@ package "PlayerInformation" as PlayerInformation1 {
   }
 }
 package "PlayerInformation" as PlayerInformation2 {
-  class CPU <<PanelContainer>> {
+  class Black <<PanelContainer>> {
     - WhiteImage
     - BlackImage
     - SELECTED_BG_COLOR
@@ -64,7 +64,9 @@ Package "Game" as GameScene {
     - DiskScene
     - MAX_LOCATION_NUMBER
     * current_color
+    * player_color
     * animation_disks
+    * cpu
     ---
     + _ready()
     + initialize()
@@ -100,8 +102,8 @@ left to right direction
 Main --o ColorRect
 Main --o Container
 Container --o InformationBar
-InformationBar --o Player
-InformationBar --o CPU
+InformationBar --o White
+InformationBar --o Black
 Container --o GameContainer
 GameContainer --o Game
 Container --o NavigationBar
@@ -125,7 +127,9 @@ class Game <<Control>> {
   - DiskScene
   - MAX_LOCATION_NUMBER
   * current_color
+  * player_color
   * animation_disks
+  * cpu
   ---
   + _ready()
   + initialize()
@@ -173,6 +177,24 @@ package "Disk" as DiskScene {
     + _on_animation_finished()
   }
 }
+class CPU <<(C,white)>> {
+  * color
+  * game
+  ---
+  + initialize( _game )
+  + perform()
+  + decide_place()
+  + placeable_moves()
+}
+class NormalCPU <<(C,white)>> {
+  + decide_place()
+}
+class EasyCPU <<(C,white)>> {
+  + decide_place()
+}
+class HardCPU <<(C,white)>> {
+  + decide_place()
+}
 
 left to right direction
 
@@ -181,4 +203,9 @@ Board --o Disk
 
 Game::_on_board_clicked <-[#blue,thickness=2]- Board::clicked
 Game::_on_disk_animation_finished <-[#blue,thickness=2]- Disk::animation_finished
+
+Game::cpu .. CPU
+CPU <|-- EasyCPU
+CPU <|-- NormalCPU
+CPU <|-- HardCPU
 ....

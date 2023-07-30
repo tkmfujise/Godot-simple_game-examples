@@ -1,5 +1,7 @@
 extends Control
 
+class_name Game
+
 signal color_count_changed
 signal turn_changed
 signal all_animation_finished
@@ -7,15 +9,17 @@ signal all_animation_finished
 const DiskScene = preload("res://src/Disk/Disk.tscn")
 const MAX_LOCATION_NUMBER = 8
 
-var current_color : Disk.COLOR : set = set_current_color
+var current_color : Disk.COLOR = Disk.COLOR.BLACK
+var player_color : Disk.COLOR
 var animation_disks : Array[Node] = []
+var cpu : CPU
 
 
 func _ready() -> void:
-    initialize()
+    initialize(Disk.COLOR.BLACK)
 
 
-func initialize() -> void:
+func initialize(_player_color: Disk.COLOR) -> void:
     clear_disks()
     put(Vector2i(4, 4), Disk.COLOR.WHITE)
     put(Vector2i(4, 5), Disk.COLOR.BLACK)
@@ -23,9 +27,23 @@ func initialize() -> void:
     put(Vector2i(5, 5), Disk.COLOR.WHITE)
     print(get_disks().map(func(d): return d.location))
     emit_signal_color_count_changed()
-    current_color = Disk.COLOR.WHITE
+    player_color  = _player_color
+    current_color = Disk.COLOR.BLACK
+    # setup_cpu(EasyCPU)
+    setup_cpu(NormalCPU)
+    # setup_cpu(HardCPU)
 
 
+func setup_cpu(level: Object) -> void:
+    cpu = level.new()
+    cpu.initialize(self)
+
+
+func is_player_turn() -> bool:
+    return current_color == player_color
+
+
+# TODO 置ける場所が無い場合に"パス"をできるようにする
 func place(location: Vector2i) -> void:
     if invalid_place(location, current_color):
         printerr("invalid place tried: ", location)
@@ -142,16 +160,13 @@ func locations_line_from(base: Vector2i, dx: int, dy: int) -> Array:
     return arr.filter(func(v): return !out_of_range(v))
 
 
-func set_current_color(_color: Disk.COLOR) -> void:
-    current_color = _color
-    emit_signal("turn_changed", current_color)
-
-
 func take_turn() -> void:
     if current_color == Disk.COLOR.WHITE:
         current_color = Disk.COLOR.BLACK
     else:
         current_color = Disk.COLOR.WHITE
+    emit_signal("turn_changed")
+    if current_color == cpu.color: cpu.perform()
 
 
 func emit_signal_color_count_changed() -> void:
@@ -163,13 +178,14 @@ func emit_signal_color_count_changed() -> void:
 
 func _on_board_clicked(location: Vector2i) -> void:
     print(location)
-    place(location)
+    if is_player_turn(): place(location)
 
 
 func _on_disk_animation_finished() -> void:
     animation_disks = animation_disks.filter(
         func(c): return c.frame != 0)
-    if not animation_disks: emit_signal("all_animation_finished")
+    if animation_disks.is_empty():
+        emit_signal("all_animation_finished")
 
 
 func _on_all_animation_finished() -> void:
