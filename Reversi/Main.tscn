@@ -1,0 +1,71 @@
+[gd_scene load_steps=5 format=3 uid="uid://bapm06hf14dt1"]
+
+[ext_resource type="Theme" uid="uid://wwrqircq46il" path="res://theme.tres" id="1_5mhjg"]
+[ext_resource type="Script" path="res://Main.gd" id="1_tx1d5"]
+[ext_resource type="PackedScene" uid="uid://dedl5efd6q0wy" path="res://src/Game/Game.tscn" id="1_whab1"]
+[ext_resource type="PackedScene" uid="uid://kaqfgkn8l4xq" path="res://src/PlayerInformation/PlayerInformation.tscn" id="3_r0av5"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_5mhjg")
+script = ExtResource("1_tx1d5")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.184314, 0.184314, 0.184314, 1)
+
+[node name="Container" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InformationBar" type="HBoxContainer" parent="Container"]
+layout_mode = 2
+alignment = 1
+
+[node name="White" parent="Container/InformationBar" instance=ExtResource("3_r0av5")]
+layout_mode = 2
+player_name = "CPU"
+disk_count = 2
+
+[node name="Black" parent="Container/InformationBar" instance=ExtResource("3_r0av5")]
+layout_mode = 2
+player_name = "Player"
+disk_color = 1
+disk_count = 2
+
+[node name="GameContainer" type="CenterContainer" parent="Container"]
+layout_mode = 2
+
+[node name="Game" parent="Container/GameContainer" instance=ExtResource("1_whab1")]
+layout_mode = 2
+
+[node name="NavigationBar" type="HBoxContainer" parent="Container"]
+layout_mode = 2
+
+[node name="NewButton" type="Button" parent="Container/NavigationBar"]
+layout_mode = 2
+text = "NEW"
+
+[connection signal="color_count_changed" from="Container/GameContainer/Game" to="." method="_on_game_color_count_changed"]
+[connection signal="turn_changed" from="Container/GameContainer/Game" to="." method="_on_game_turn_changed"]
+[connection signal="pressed" from="Container/NavigationBar/NewButton" to="." method="_on_new_button_pressed"]
