@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxoogdil53sw2"]
+
+[ext_resource type="PackedScene" uid="uid://do1powruon0kb" path="res://assets/Disk.glb" id="1_siw5r"]
+
+[node name="Disk" instance=ExtResource("1_siw5r")]
