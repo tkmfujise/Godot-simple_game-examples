@@ -1,5 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://cxoogdil53sw2"]
+[gd_scene load_steps=3 format=3 uid="uid://bfv8bxvferegu"]
 
-[ext_resource type="PackedScene" uid="uid://do1powruon0kb" path="res://assets/Disk.glb" id="1_siw5r"]
+[ext_resource type="Script" path="res://src/Disk/Disk.gd" id="1_c8uv0"]
+[ext_resource type="PackedScene" uid="uid://do1powruon0kb" path="res://assets/Disk.glb" id="1_hedjo"]
 
-[node name="Disk" instance=ExtResource("1_siw5r")]
+[node name="Disk" type="Node3D"]
+script = ExtResource("1_c8uv0")
+color = 1
+
+[node name="Mesh" parent="." instance=ExtResource("1_hedjo")]

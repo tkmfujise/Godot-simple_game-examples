@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://bc6grdnlm6i84"]
+
+[ext_resource type="Texture2D" uid="uid://diva3an1f0plt" path="res://assets/brown_photostudio_02_1k.exr" id="1_xeg3y"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_fui7a"]
+panorama = ExtResource("1_xeg3y")
+
+[sub_resource type="Sky" id="Sky_racny"]
+sky_material = SubResource("PanoramaSkyMaterial_fui7a")
+
+[sub_resource type="Environment" id="Environment_ymfj3"]
+background_mode = 2
+sky = SubResource("Sky_racny")
+sky_rotation = Vector3(3.48787e-16, -4.88692, 3.48787e-16)
+ambient_light_source = 3
+
+[node name="Studio" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, -6.92275e-16, 6.05662e-17, 6.05662e-17, 0.173648, 0.984808, -6.92275e-16, -0.984808, 0.173648, 1.6, 2.9, 2.3)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.745208, 0.666832, 0, -0.666832, 0.745208, 0, 3.05458, 4.02908)
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.00211187, 0.999998, 0, -0.999998, 0.00211187, 1.57565, 3.49658, 1.58929)
+light_color = Color(0.792157, 0.772549, 0.235294, 1)
+light_energy = 4.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ymfj3")

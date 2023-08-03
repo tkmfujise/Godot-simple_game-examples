@@ -1,0 +1,74 @@
+[gd_scene load_steps=10 format=3 uid="uid://c5fsketpyilv1"]
+
+[ext_resource type="Script" path="res://src/Game/Game.gd" id="1_g7ddw"]
+[ext_resource type="PackedScene" uid="uid://bfv8bxvferegu" path="res://src/Disk/Disk.tscn" id="2_iqxli"]
+[ext_resource type="PackedScene" uid="uid://cjjyi5dyh6rxb" path="res://assets/Board.glb" id="3_efg38"]
+[ext_resource type="Script" path="res://src/Game/Board.gd" id="3_hm4mq"]
+[ext_resource type="Texture2D" uid="uid://diva3an1f0plt" path="res://assets/brown_photostudio_02_1k.exr" id="4_42soo"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rcxe4"]
+size = Vector3(0.348812, 0.0380446, 0.350942)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_fui7a"]
+panorama = ExtResource("4_42soo")
+
+[sub_resource type="Sky" id="Sky_racny"]
+sky_material = SubResource("PanoramaSkyMaterial_fui7a")
+
+[sub_resource type="Environment" id="Environment_ymfj3"]
+background_mode = 2
+sky = SubResource("Sky_racny")
+sky_rotation = Vector3(3.48787e-16, -4.88692, 3.48787e-16)
+ambient_light_source = 3
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Game" type="Node3D" parent="."]
+script = ExtResource("1_g7ddw")
+
+[node name="Board" parent="Game" instance=ExtResource("3_efg38")]
+transform = Transform3D(10, 0, 0, 0, 10, 1.25788e-07, 0, -1.25788e-07, 10, 0, 0, 0)
+script = ExtResource("3_hm4mq")
+
+[node name="StaticBody" type="StaticBody3D" parent="Game/Board"]
+transform = Transform3D(1, 0, 0, 0, 1, -2.22045e-16, 0, 3.45468e-16, 1, 0, 0, 0)
+
+[node name="CollisionShape" type="CollisionShape3D" parent="Game/Board/StaticBody"]
+transform = Transform3D(0.999983, -7.24483e-11, 0.00575956, 7.24483e-11, 1, 2.0851e-13, -0.00575956, 2.09245e-13, 0.999983, 0.158085, 0.000850914, 0.157016)
+shape = SubResource("BoxShape3D_rcxe4")
+
+[node name="Disks" type="Node3D" parent="Game/Board"]
+
+[node name="Disk" parent="Game/Board/Disks" instance=ExtResource("2_iqxli")]
+transform = Transform3D(1, 0, 0, 0, 1, -1.25788e-08, 0, 1.25788e-08, 1, 2.08165e-13, 0.017, 2.14048e-10)
+
+[node name="Disk2" parent="Game/Board/Disks" instance=ExtResource("2_iqxli")]
+transform = Transform3D(1, 0, 0, 0, 1, -1.25788e-08, 0, 1.25788e-08, 1, 0.0464, 0.017, 2.14048e-10)
+
+[node name="Disk3" parent="Game/Board/Disks" instance=ExtResource("2_iqxli")]
+transform = Transform3D(1, 0, 0, 0, 1, -2.22045e-16, 0, 3.45468e-16, 1, 0.092, 0.017, 0.092)
+
+[node name="Studio" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="Studio"]
+transform = Transform3D(1, -6.92275e-16, 6.05662e-17, 6.05662e-17, 0.173648, 0.984808, -6.92275e-16, -0.984808, 0.173648, 1.6, 2.9, 2.3)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Studio"]
+transform = Transform3D(1, 0, 0, 0, 0.745208, 0.666832, 0, -0.666832, 0.745208, 0, 3.05458, 4.02908)
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Studio"]
+transform = Transform3D(1, 0, 0, 0, 0.00211187, 0.999998, 0, -0.999998, 0.00211187, 1.57565, 3.49658, 1.58929)
+light_color = Color(0.792157, 0.772549, 0.235294, 1)
+light_energy = 4.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Studio"]
+environment = SubResource("Environment_ymfj3")
+
+[connection signal="clicked" from="Game/Board" to="Game" method="_on_board_clicked"]
