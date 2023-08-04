@@ -2,6 +2,8 @@ extends Node3D
 
 class_name Disk
 
+signal animation_finished
+
 enum COLOR { WHITE, BLACK }
 
 @onready var mesh = $Mesh
@@ -32,8 +34,10 @@ func reverse() -> void:
     animation.play()
 
 
-func _on_animation_finished(anim_name: StringName) -> void:
+func _on_player_animation_finished(anim_name: StringName) -> void:
     if color == COLOR.WHITE:
         color = COLOR.BLACK
     else:
         color = COLOR.WHITE
+    emit_signal("animation_finished", self)
+

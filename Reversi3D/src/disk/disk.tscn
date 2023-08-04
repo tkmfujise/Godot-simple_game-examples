@@ -8,6 +8,9 @@ script = ExtResource("1_c8uv0")
 
 [node name="Mesh" parent="." instance=ExtResource("1_hedjo")]
 
+[node name="Disk2" parent="Mesh" index="0"]
+transform = Transform3D(-1, 1.50996e-07, 0, -1.50996e-07, -1, 0, 0, 0, 1, 0, 0, 0)
+
 [node name="AnimationPlayer" parent="Mesh" index="1"]
 speed_scale = 1.75
 
@@ -19,6 +22,6 @@ visible = false
 transform = Transform3D(1, 0, 0, 0, 0.616692, 0.787204, 0, -0.787204, 0.616692, 0, 0.058381, 0.0582428)
 visible = false
 
-[connection signal="animation_finished" from="Mesh/AnimationPlayer" to="." method="_on_animation_finished"]
+[connection signal="animation_finished" from="Mesh/AnimationPlayer" to="." method="_on_player_animation_finished"]
 
 [editable path="Mesh"]

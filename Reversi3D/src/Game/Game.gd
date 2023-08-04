@@ -1,23 +1,36 @@
 extends Node3D
 
+class_name Game
+
 signal turn_changed
 
 const MAX_LOCATION_NUMBER = 8
 @onready var DiskScene = preload("res://src/Disk/Disk.tscn")
+
 var current_color : Disk.COLOR
+var player_color : Disk.COLOR
+var cpu : CPU
+var animation_disks : Array[Node] = []
 
 
 func _ready() -> void:
-    initialize()
+    initialize(Disk.COLOR.BLACK)
 
 
-func initialize() -> void:
+func initialize(_player_color: Disk.COLOR) -> void:
     clear_disks()
     put(Vector2(4, 4), Disk.COLOR.WHITE)
     put(Vector2(4, 5), Disk.COLOR.BLACK)
     put(Vector2(5, 4), Disk.COLOR.BLACK)
     put(Vector2(5, 5), Disk.COLOR.WHITE)
-    current_color = Disk.COLOR.WHITE
+    current_color = Disk.COLOR.BLACK
+    player_color  = current_color
+    set_cpu(NormalCPU)
+
+
+func set_cpu(level: Object) -> void:
+    cpu = level.new()
+    cpu.initialize(self)
 
 
 func place(location: Vector2i) -> void:
@@ -26,13 +39,13 @@ func place(location: Vector2i) -> void:
     else:
         var disk = put(location, current_color)
         try_reverse_by(disk)
-    take_turn()
 
 
 func put(location: Vector2i, color: Disk.COLOR) -> Disk:
     var disk = DiskScene.instantiate()
     disk.location = location
     disk.color    = color
+    disk.animation_finished.connect(_on_disk_animation_finished)
     $Board.add_disk(disk)
     return disk
 
@@ -71,6 +84,7 @@ func out_of_range(location: Vector2i) -> bool:
 func try_reverse_by(disk: Disk) -> void:
     for other in reversible_disks_by(disk):
         other.reverse()
+        animation_disks.append(other)
 
 
 func reversible_count(location: Vector2i, color: Disk.COLOR) -> int:
@@ -128,13 +142,20 @@ func locations_line_from(base: Vector2i, dx: int, dy: int) -> Array:
     return arr.filter(func(v): return !out_of_range(v))
 
 
+# TODO パスに対応
 func take_turn() -> void:
     if current_color == Disk.COLOR.WHITE:
         current_color = Disk.COLOR.BLACK
     else:
         current_color = Disk.COLOR.WHITE
     emit_signal("turn_changed")
+    if current_color == cpu.color: cpu.perform()
 
 
 func _on_board_clicked(location: Vector2i) -> void:
     place(location)
+
+
+func _on_disk_animation_finished(disk: Disk) -> void:
+    animation_disks = animation_disks.filter(func(d): return d != disk)
+    if animation_disks.is_empty(): take_turn()
