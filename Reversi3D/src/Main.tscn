@@ -1,8 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://c5fsketpyilv1"]
+[gd_scene load_steps=14 format=3 uid="uid://c5fsketpyilv1"]
 
 [ext_resource type="Script" path="res://src/Game/Game.gd" id="1_g7ddw"]
 [ext_resource type="Theme" uid="uid://cp4lxw0kwnw8t" path="res://theme.tres" id="1_tfikh"]
 [ext_resource type="PackedScene" uid="uid://bfv8bxvferegu" path="res://src/Disk/Disk.tscn" id="2_iqxli"]
+[ext_resource type="Script" path="res://src/Main.gd" id="2_snhwx"]
 [ext_resource type="PackedScene" uid="uid://cjjyi5dyh6rxb" path="res://assets/Board.glb" id="3_efg38"]
 [ext_resource type="Script" path="res://src/Game/Board.gd" id="3_hm4mq"]
 [ext_resource type="Texture2D" uid="uid://diva3an1f0plt" path="res://assets/brown_photostudio_02_1k.exr" id="4_42soo"]
@@ -32,6 +33,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_tfikh")
+script = ExtResource("2_snhwx")
 
 [node name="Game" type="Node3D" parent="."]
 script = ExtResource("1_g7ddw")
@@ -85,6 +87,22 @@ player_name = "Player"
 color = 1
 selected = true
 
+[node name="NewGameButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -312.0
+offset_top = -124.0
+offset_right = -44.0
+offset_bottom = -39.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("1_tfikh")
+text = "New Game"
+
 [node name="Studio" type="Node3D" parent="."]
 
 [node name="Camera3D" type="Camera3D" parent="Studio"]
@@ -106,3 +124,4 @@ environment = SubResource("Environment_ymfj3")
 [connection signal="passed" from="Game" to="Game" method="_on_passed"]
 [connection signal="turn_changed" from="Game" to="Game" method="_on_turn_changed"]
 [connection signal="clicked" from="Game/Board" to="Game" method="_on_board_clicked"]
+[connection signal="pressed" from="NewGameButton" to="." method="_on_new_game_button_pressed"]

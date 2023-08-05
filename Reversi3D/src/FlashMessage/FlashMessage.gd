@@ -1,10 +1,12 @@
 extends Path3D
 
+signal finished
 
 @export var text : String : set = set_text
 @export_range (0, 1) var progress : float : set = set_progress
 
 @onready var TextLabel = $PathFollow3D/Text
+var callback : Callable
 
 
 func _ready() -> void:
@@ -12,9 +14,10 @@ func _ready() -> void:
     # spawn(text)
 
 
-func spawn(_text: String) -> void:
+func spawn(_text: String, _callback := Callable()) -> void:
     progress = 0
-    text = _text
+    text     = _text
+    callback = _callback
     $Timer.start()
 
 
@@ -44,6 +47,8 @@ func _on_timer_timeout() -> void:
     elif progress > 1:
         progress = 0
         $Timer.stop()
+        if callback: callback.call()
+        emit_signal("finished")
     else:
         progress += 0.1
 

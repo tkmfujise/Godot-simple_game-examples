@@ -1,4 +1,11 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://cp4lxw0kwnw8t"]
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://cp4lxw0kwnw8t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dcejh"]
+content_margin_left = 50.0
+content_margin_top = 20.0
+content_margin_right = 50.0
+content_margin_bottom = 20.0
+bg_color = Color(0.945098, 0.968627, 0.937255, 0.498039)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ghn2e"]
 content_margin_left = 50.0
@@ -18,5 +25,12 @@ corner_radius_bottom_right = 50
 shadow_size = 7
 
 [resource]
+Button/colors/font_color = Color(0.203922, 0.278431, 0.141176, 1)
+Button/colors/font_focus_color = Color(0.247059, 0.333333, 0.176471, 1)
+Button/colors/font_hover_color = Color(0.368627, 0.784314, 0.368627, 1)
+Button/colors/font_hover_pressed_color = Color(0.517647, 0.756863, 0.305882, 1)
+Button/colors/font_pressed_color = Color(0.517647, 0.756863, 0.305882, 1)
+Button/font_sizes/font_size = 32
+Button/styles/normal = SubResource("StyleBoxFlat_dcejh")
 Label/font_sizes/font_size = 32
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_ghn2e")

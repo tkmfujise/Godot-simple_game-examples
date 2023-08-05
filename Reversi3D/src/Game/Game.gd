@@ -16,20 +16,20 @@ var animation_disks : Array[Node] = []
 
 
 func _ready() -> void:
-    initialize(Disk.COLOR.BLACK)
+    initialize(Disk.COLOR.BLACK, EasyCPU)
 
 
-func initialize(_player_color: Disk.COLOR) -> void:
+func initialize(_player_color: Disk.COLOR, cpu_level: Object) -> void:
     clear_disks()
+    animation_disks = []
     put(Vector2(4, 4), Disk.COLOR.WHITE)
     put(Vector2(4, 5), Disk.COLOR.BLACK)
     put(Vector2(5, 4), Disk.COLOR.BLACK)
     put(Vector2(5, 5), Disk.COLOR.WHITE)
-    current_color = Disk.COLOR.BLACK
+    current_color = _player_color
     player_color  = current_color
-    set_cpu(EasyCPU)
-    # set_cpu(NormalCPU)
-    # set_cpu(HardCPU)
+    set_cpu(cpu_level)
+    refresh_player_info()
 
 
 func set_cpu(level: Object) -> void:
@@ -168,7 +168,6 @@ func take_turn() -> void:
     if not placeable_locations(current_color):
         if placeable_locations(opposite_color):
             emit_signal("passed", current_color)
-            take_turn()
         else: emit_signal("finished")
     else:
         if current_color == cpu.color: cpu.perform()
@@ -178,6 +177,11 @@ func take_turn() -> void:
             pcpu.initialize(self)
             pcpu.color = player_color
             pcpu.perform()
+
+
+func refresh_player_info() -> void:
+    for info in [$CPUInformation, $PlayerInformation]:
+        info.selected = info.color == current_color
 
 
 func _on_board_clicked(location: Vector2i) -> void:
@@ -190,13 +194,14 @@ func _on_disk_animation_finished(disk: Disk) -> void:
 
 
 func _on_turn_changed() -> void:
-    for info in [$CPUInformation, $PlayerInformation]:
-        info.selected = info.color == current_color
+    refresh_player_info()
 
 
 func _on_passed(_color: Disk.COLOR) -> void:
-    $FlashMesage.spawn("Passed")
+    $FlashMesage.spawn("Pass", take_turn)
 
 
 func _on_finished() -> void:
     $FlashMesage.spawn("Game finished")
+
+
