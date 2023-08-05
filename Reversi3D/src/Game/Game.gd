@@ -3,6 +3,8 @@ extends Node3D
 class_name Game
 
 signal turn_changed
+signal passed
+signal finished
 
 const MAX_LOCATION_NUMBER = 8
 @onready var DiskScene = preload("res://src/Disk/Disk.tscn")
@@ -25,7 +27,9 @@ func initialize(_player_color: Disk.COLOR) -> void:
     put(Vector2(5, 5), Disk.COLOR.WHITE)
     current_color = Disk.COLOR.BLACK
     player_color  = current_color
-    set_cpu(NormalCPU)
+    set_cpu(EasyCPU)
+    # set_cpu(NormalCPU)
+    # set_cpu(HardCPU)
 
 
 func set_cpu(level: Object) -> void:
@@ -79,6 +83,17 @@ func out_of_range(location: Vector2i) -> bool:
         (1 <= location.x and location.x <= MAX_LOCATION_NUMBER) &&
         (1 <= location.y and location.y <= MAX_LOCATION_NUMBER)
     )
+
+
+func placeable_locations(color: Disk.COLOR) -> Array:
+    var locations = []
+    for x in range(1, MAX_LOCATION_NUMBER + 1):
+        for y in range(1, MAX_LOCATION_NUMBER + 1):
+            var location = Vector2i(x, y)
+            if !invalid_place(location, color):
+                locations.append(location)
+    return locations
+
 
 
 func try_reverse_by(disk: Disk) -> void:
@@ -142,14 +157,27 @@ func locations_line_from(base: Vector2i, dx: int, dy: int) -> Array:
     return arr.filter(func(v): return !out_of_range(v))
 
 
-# TODO パスに対応
 func take_turn() -> void:
+    var opposite_color = current_color
     if current_color == Disk.COLOR.WHITE:
         current_color = Disk.COLOR.BLACK
     else:
         current_color = Disk.COLOR.WHITE
     emit_signal("turn_changed")
-    if current_color == cpu.color: cpu.perform()
+
+    if not placeable_locations(current_color):
+        if placeable_locations(opposite_color):
+            emit_signal("passed", current_color)
+            take_turn()
+        else: emit_signal("finished")
+    else:
+        if current_color == cpu.color: cpu.perform()
+        else:
+#            return
+            var pcpu = HardCPU.new()
+            pcpu.initialize(self)
+            pcpu.color = player_color
+            pcpu.perform()
 
 
 func _on_board_clicked(location: Vector2i) -> void:
@@ -159,3 +187,16 @@ func _on_board_clicked(location: Vector2i) -> void:
 func _on_disk_animation_finished(disk: Disk) -> void:
     animation_disks = animation_disks.filter(func(d): return d != disk)
     if animation_disks.is_empty(): take_turn()
+
+
+func _on_turn_changed() -> void:
+    for info in [$CPUInformation, $PlayerInformation]:
+        info.selected = info.color == current_color
+
+
+func _on_passed(_color: Disk.COLOR) -> void:
+    $FlashMesage.spawn("Passed")
+
+
+func _on_finished() -> void:
+    $FlashMesage.spawn("Game finished")

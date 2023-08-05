@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://cj4jcraesajeo"]
+
+[ext_resource type="Script" path="res://src/FlashMessage/FlashMessage.gd" id="1_q4tud"]
+
+[sub_resource type="Curve3D" id="Curve3D_x4jgd"]
+_data = {
+"points": PackedVector3Array(-0.0128469, 0.0282064, -0.00184441, 0.0128469, -0.0282064, 0.00184441, -0.052959, -0.022076, -1.94478, -0.0091335, 0.0195084, -2.07132, 0.0091335, -0.0195084, 2.07132, -0.00674184, 0.802275, -0.0249577, 0, 0, 0, 0, 0, 0, 0.0063543, -0.865671, 0.440681),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[node name="FlashMesage" type="Path3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0406833)
+curve = SubResource("Curve3D_x4jgd")
+script = ExtResource("1_q4tud")
+text = "Something happend."
+
+[node name="PathFollow3D" type="PathFollow3D" parent="."]
+transform = Transform3D(0.130952, 0.991244, -0.0162283, 0.921015, -0.127698, -0.367971, -0.366827, 0.0332403, -0.92968, -0.0188859, 0.61483, -1.38568)
+progress = 0.903862
+
+[node name="Text" type="Label3D" parent="PathFollow3D"]
+transform = Transform3D(0.135112, 0.144214, 0.980281, 0.990822, -0.0154231, -0.134297, -0.00424838, 0.989429, -0.144974, 0, 0, 0)
+text = "Something happend."
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.05
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

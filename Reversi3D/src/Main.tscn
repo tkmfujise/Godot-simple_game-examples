@@ -1,10 +1,13 @@
-[gd_scene load_steps=10 format=3 uid="uid://c5fsketpyilv1"]
+[gd_scene load_steps=13 format=3 uid="uid://c5fsketpyilv1"]
 
 [ext_resource type="Script" path="res://src/Game/Game.gd" id="1_g7ddw"]
+[ext_resource type="Theme" uid="uid://cp4lxw0kwnw8t" path="res://theme.tres" id="1_tfikh"]
 [ext_resource type="PackedScene" uid="uid://bfv8bxvferegu" path="res://src/Disk/Disk.tscn" id="2_iqxli"]
 [ext_resource type="PackedScene" uid="uid://cjjyi5dyh6rxb" path="res://assets/Board.glb" id="3_efg38"]
 [ext_resource type="Script" path="res://src/Game/Board.gd" id="3_hm4mq"]
 [ext_resource type="Texture2D" uid="uid://diva3an1f0plt" path="res://assets/brown_photostudio_02_1k.exr" id="4_42soo"]
+[ext_resource type="PackedScene" uid="uid://cj4jcraesajeo" path="res://src/FlashMessage/FlashMessage.tscn" id="6_1hg1w"]
+[ext_resource type="PackedScene" uid="uid://6nak03c3h6xh" path="res://src/PlayerInformation/PlayerInformation.tscn" id="7_500vr"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rcxe4"]
 size = Vector3(0.348812, 0.0380446, 0.350942)
@@ -28,6 +31,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_tfikh")
 
 [node name="Game" type="Node3D" parent="."]
 script = ExtResource("1_g7ddw")
@@ -54,6 +58,33 @@ transform = Transform3D(1, 0, 0, 0, 1, -1.25788e-08, 0, 1.25788e-08, 1, 0.0464, 
 [node name="Disk3" parent="Game/Board/Disks" instance=ExtResource("2_iqxli")]
 transform = Transform3D(1, 0, 0, 0, 1, -2.22045e-16, 0, 3.45468e-16, 1, 0.092, 0.017, 0.092)
 
+[node name="FlashMesage" parent="Game" instance=ExtResource("6_1hg1w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.59017, 0.324898, 1.62873)
+
+[node name="CPUInformation" parent="Game" instance=ExtResource("7_500vr")]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -209.0
+offset_top = 32.0
+offset_right = -35.0
+offset_bottom = 140.0
+grow_horizontal = 0
+player_name = "CPU"
+
+[node name="PlayerInformation" parent="Game" instance=ExtResource("7_500vr")]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 43.0
+offset_top = -133.0
+offset_right = 217.0
+offset_bottom = -25.0
+grow_vertical = 0
+player_name = "Player"
+color = 1
+selected = true
+
 [node name="Studio" type="Node3D" parent="."]
 
 [node name="Camera3D" type="Camera3D" parent="Studio"]
@@ -71,4 +102,7 @@ light_energy = 4.0
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Studio"]
 environment = SubResource("Environment_ymfj3")
 
+[connection signal="finished" from="Game" to="Game" method="_on_finished"]
+[connection signal="passed" from="Game" to="Game" method="_on_passed"]
+[connection signal="turn_changed" from="Game" to="Game" method="_on_turn_changed"]
 [connection signal="clicked" from="Game/Board" to="Game" method="_on_board_clicked"]

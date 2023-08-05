@@ -42,5 +42,6 @@ func _input(event: InputEvent) -> void:
         print("Mouse event got: ", event.position)
         var _position = get_viewport().get_mouse_position()
         var location = calc_location(_position)
-        print(location)
-        emit_signal("clicked", location)
+        if location != Vector2i.ZERO:
+            print(location)
+            emit_signal("clicked", location)

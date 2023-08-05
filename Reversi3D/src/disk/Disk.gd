@@ -34,7 +34,7 @@ func reverse() -> void:
     animation.play()
 
 
-func _on_player_animation_finished(anim_name: StringName) -> void:
+func _on_player_animation_finished(_anim_name: StringName) -> void:
     if color == COLOR.WHITE:
         color = COLOR.BLACK
     else:

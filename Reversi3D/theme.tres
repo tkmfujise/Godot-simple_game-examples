@@ -1,0 +1,22 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://cp4lxw0kwnw8t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ghn2e"]
+content_margin_left = 50.0
+content_margin_top = 30.0
+content_margin_right = 60.0
+content_margin_bottom = 30.0
+bg_color = Color(1, 1, 1, 1)
+skew = Vector2(0.2, 2.08165e-12)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.862745, 0.862745, 0.862745, 0.964706)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 50
+shadow_size = 7
+
+[resource]
+Label/font_sizes/font_size = 32
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_ghn2e")
