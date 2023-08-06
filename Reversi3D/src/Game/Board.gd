@@ -14,7 +14,7 @@ func add_disk(disk: Disk) -> void:
 
 
 func clear_disks() -> void:
-    for disk in get_disks(): $Disks.remove_child(disk)
+    for disk in get_disks(): disk.queue_free()
 
 
 func get_disks() -> Array[Node]:
