@@ -5,10 +5,12 @@ class_name Game
 signal turn_changed
 signal passed
 signal finished
+signal ended
 
 const MAX_LOCATION_NUMBER = 8
 @onready var DiskScene = preload("res://src/Disk/Disk.tscn")
 
+@export var player_as_cpu : bool
 var current_color : Disk.COLOR
 var player_color : Disk.COLOR
 var cpu : CPU
@@ -17,6 +19,7 @@ var animation_disks : Array[Node] = []
 
 func _ready() -> void:
     initialize(Disk.COLOR.BLACK, EasyCPU)
+    if player_as_cpu: let_cpu_play()
 
 
 func initialize(_player_color: Disk.COLOR, cpu_level: Object) -> void:
@@ -66,6 +69,10 @@ func get_disk(location: Vector2i) -> Disk:
     var arr = get_disks().filter(
         func(d): return d.location == location)
     return arr[0] if arr else null
+
+
+func get_color_count(color: Disk.COLOR) -> int:
+    return get_disks().filter(func(d): return d.color == color).size()
 
 
 func invalid_place(location: Vector2i, color: Disk.COLOR) -> bool:
@@ -171,12 +178,15 @@ func take_turn() -> void:
         else: emit_signal("finished")
     else:
         if current_color == cpu.color: cpu.perform()
-        else:
-#            return
-            var pcpu = HardCPU.new()
-            pcpu.initialize(self)
-            pcpu.color = player_color
-            pcpu.perform()
+        elif player_as_cpu: let_cpu_play()
+
+
+func let_cpu_play() -> void:
+    var pcpu = HardCPU.new()
+    pcpu.initialize(self)
+    pcpu.color = player_color
+    pcpu.perform()
+    pcpu.queue_free()
 
 
 func refresh_player_info() -> void:
@@ -202,6 +212,6 @@ func _on_passed(_color: Disk.COLOR) -> void:
 
 
 func _on_finished() -> void:
-    $FlashMesage.spawn("Game finished")
+    $FlashMesage.spawn("Game finished", func(): emit_signal("ended"))
 
 

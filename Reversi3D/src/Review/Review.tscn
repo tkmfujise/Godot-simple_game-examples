@@ -1,0 +1,112 @@
+[gd_scene load_steps=7 format=3 uid="uid://cb3e6y7vl1va2"]
+
+[ext_resource type="Script" path="res://src/Review/Review.gd" id="1_ehjmo"]
+[ext_resource type="PackedScene" uid="uid://cjjyi5dyh6rxb" path="res://assets/Board.glb" id="1_fxf6b"]
+[ext_resource type="PackedScene" uid="uid://b67gskoc2rfdh" path="res://src/Studio/Studio.tscn" id="1_nlogd"]
+[ext_resource type="Theme" uid="uid://cp4lxw0kwnw8t" path="res://theme.tres" id="3_pnfl1"]
+[ext_resource type="PackedScene" uid="uid://6nak03c3h6xh" path="res://src/PlayerInformation/PlayerInformation.tscn" id="4_2p4p7"]
+
+[sub_resource type="Theme" id="Theme_22ofm"]
+
+[node name="Review" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_22ofm")
+script = ExtResource("1_ehjmo")
+
+[node name="Board" parent="." instance=ExtResource("1_fxf6b")]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.1
+autostart = true
+
+[node name="Score" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -180.0
+offset_bottom = 170.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_pnfl1")
+color = Color(0.314595, 0.73743, 0.66965, 0.498039)
+
+[node name="Player" type="VBoxContainer" parent="Score"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -101.5
+offset_top = -101.5
+offset_right = -500.0
+offset_bottom = 101.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PlayerInformation" parent="Score/Player" instance=ExtResource("4_2p4p7")]
+layout_mode = 2
+player_name = "Player"
+color = 1
+
+[node name="Count" type="Label" parent="Score/Player"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 100
+text = "32"
+
+[node name="CPU" type="VBoxContainer" parent="Score"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 610.0
+offset_top = -101.5
+offset_bottom = 101.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PlayerInformation" parent="Score/CPU" instance=ExtResource("4_2p4p7")]
+layout_mode = 2
+player_name = "CPU"
+
+[node name="Count" type="Label" parent="Score/CPU"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 100
+text = "32"
+
+[node name="NewGameButton" type="Button" parent="Score"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -134.0
+offset_top = -42.5
+offset_right = 134.0
+offset_bottom = 42.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_pnfl1")
+text = "New Game
+"
+
+[node name="Studio" parent="." instance=ExtResource("1_nlogd")]
+
+[connection signal="animation_finished" from="." to="." method="_on_animation_finished"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="pressed" from="Score/NewGameButton" to="." method="_on_new_game_button_pressed"]
+
+[editable path="Studio"]

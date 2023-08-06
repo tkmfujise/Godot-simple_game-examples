@@ -1,5 +1,7 @@
 extends Node3D
 
+class_name Board
+
 signal clicked
 
 const DISK_Y_OFFSET = 0.017

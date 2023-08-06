@@ -13,15 +13,15 @@ point_count = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0406833)
 curve = SubResource("Curve3D_x4jgd")
 script = ExtResource("1_q4tud")
-text = "Something happend."
+text = "Something happened."
 
 [node name="PathFollow3D" type="PathFollow3D" parent="."]
-transform = Transform3D(0.130952, 0.991244, -0.0162283, 0.921015, -0.127698, -0.367971, -0.366827, 0.0332403, -0.92968, -0.0188859, 0.61483, -1.38568)
-progress = 0.903862
+transform = Transform3D(0.135099, 0.990809, -0.00472037, 0.989228, -0.13461, 0.0573249, 0.0561636, -0.0124142, -0.998329, -0.00599959, 0.797012, 0.137629)
+progress = 2.44684
 
 [node name="Text" type="Label3D" parent="PathFollow3D"]
 transform = Transform3D(0.135112, 0.144214, 0.980281, 0.990822, -0.0154231, -0.134297, -0.00424838, 0.989429, -0.144974, 0, 0, 0)
-text = "Something happend."
+text = "Something happened."
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.05
