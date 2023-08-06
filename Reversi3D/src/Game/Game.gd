@@ -18,7 +18,7 @@ var animation_disks : Array[Node] = []
 
 
 func _ready() -> void:
-    initialize(Disk.COLOR.BLACK, EasyCPU)
+    initialize(Disk.COLOR.BLACK, NormalCPU)
     if player_as_cpu: let_cpu_play()
 
 

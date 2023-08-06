@@ -13,7 +13,7 @@ func store_game_result() -> void:
 
 
 func _on_new_game_button_pressed() -> void:
-    new_game(Disk.COLOR.BLACK, EasyCPU)
+    new_game(Disk.COLOR.BLACK, NormalCPU)
 
 
 func _on_game_ended() -> void:

@@ -27,7 +27,6 @@ ReviewScene = ExtResource("3_jelum")
 
 [node name="Game" type="Node3D" parent="."]
 script = ExtResource("1_g7ddw")
-player_as_cpu = true
 
 [node name="Board" parent="Game" instance=ExtResource("3_efg38")]
 transform = Transform3D(10, 0, 0, 0, 10, 1.25788e-07, 0, -1.25788e-07, 10, 0, 0, 0)
