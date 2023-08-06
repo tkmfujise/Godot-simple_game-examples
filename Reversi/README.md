@@ -2,6 +2,10 @@
 
 <img src="doc/Screenshot.png" width=600px>
 
+## Feature
+
+![gif](doc/Reversi.gif)
+
 ## Architecture
 
 ### Class diagram

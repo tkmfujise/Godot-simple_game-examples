@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://6nak03c3h6xh"]
+
+[ext_resource type="Theme" uid="uid://cp4lxw0kwnw8t" path="res://theme.tres" id="1_ihecg"]
+[ext_resource type="Script" path="res://src/PlayerInformation/PlayerInformation.gd" id="2_hc2cr"]
+
+[node name="PlayerInformation" type="PanelContainer"]
+offset_right = 174.0
+offset_bottom = 108.0
+size_flags_horizontal = 8
+theme = ExtResource("1_ihecg")
+script = ExtResource("2_hc2cr")
+
+[node name="Name" type="Label" parent="."]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.670588, 0.670588, 0.670588, 1)
+text = "Name"

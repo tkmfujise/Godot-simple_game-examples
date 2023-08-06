@@ -1,0 +1,105 @@
+[gd_scene load_steps=12 format=3 uid="uid://c5fsketpyilv1"]
+
+[ext_resource type="Script" path="res://src/Game/Game.gd" id="1_g7ddw"]
+[ext_resource type="Theme" uid="uid://cp4lxw0kwnw8t" path="res://theme.tres" id="1_tfikh"]
+[ext_resource type="PackedScene" uid="uid://bfv8bxvferegu" path="res://src/Disk/Disk.tscn" id="2_iqxli"]
+[ext_resource type="Script" path="res://src/Main.gd" id="2_snhwx"]
+[ext_resource type="PackedScene" uid="uid://cjjyi5dyh6rxb" path="res://assets/Board.glb" id="3_efg38"]
+[ext_resource type="Script" path="res://src/Game/Board.gd" id="3_hm4mq"]
+[ext_resource type="PackedScene" uid="uid://cb3e6y7vl1va2" path="res://src/Review/Review.tscn" id="3_jelum"]
+[ext_resource type="PackedScene" uid="uid://cj4jcraesajeo" path="res://src/FlashMessage/FlashMessage.tscn" id="6_1hg1w"]
+[ext_resource type="PackedScene" uid="uid://6nak03c3h6xh" path="res://src/PlayerInformation/PlayerInformation.tscn" id="7_500vr"]
+[ext_resource type="PackedScene" uid="uid://b67gskoc2rfdh" path="res://src/Studio/Studio.tscn" id="9_864xk"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rcxe4"]
+size = Vector3(0.348812, 0.0380446, 0.350942)
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_tfikh")
+script = ExtResource("2_snhwx")
+ReviewScene = ExtResource("3_jelum")
+
+[node name="Game" type="Node3D" parent="."]
+script = ExtResource("1_g7ddw")
+
+[node name="Board" parent="Game" instance=ExtResource("3_efg38")]
+transform = Transform3D(10, 0, 0, 0, 10, 1.25788e-07, 0, -1.25788e-07, 10, 0, 0, 0)
+script = ExtResource("3_hm4mq")
+
+[node name="StaticBody" type="StaticBody3D" parent="Game/Board"]
+transform = Transform3D(1, 0, 0, 0, 1, -2.22045e-16, 0, 3.45468e-16, 1, 0, 0, 0)
+
+[node name="CollisionShape" type="CollisionShape3D" parent="Game/Board/StaticBody"]
+transform = Transform3D(0.999983, -7.24483e-11, 0.00575956, 7.24483e-11, 1, 2.0851e-13, -0.00575956, 2.09245e-13, 0.999983, 0.158085, 0.000850914, 0.157016)
+shape = SubResource("BoxShape3D_rcxe4")
+
+[node name="Disks" type="Node3D" parent="Game/Board"]
+
+[node name="Disk" parent="Game/Board/Disks" instance=ExtResource("2_iqxli")]
+transform = Transform3D(1, 0, 0, 0, 1, -1.25788e-08, 0, 1.25788e-08, 1, 2.08165e-13, 0.017, 2.14048e-10)
+
+[node name="Disk2" parent="Game/Board/Disks" instance=ExtResource("2_iqxli")]
+transform = Transform3D(1, 0, 0, 0, 1, -1.25788e-08, 0, 1.25788e-08, 1, 0.0464, 0.017, 2.14048e-10)
+
+[node name="Disk3" parent="Game/Board/Disks" instance=ExtResource("2_iqxli")]
+transform = Transform3D(1, 0, 0, 0, 1, -2.22045e-16, 0, 3.45468e-16, 1, 0.092, 0.017, 0.092)
+
+[node name="FlashMesage" parent="Game" instance=ExtResource("6_1hg1w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.59017, 0.324898, 1.62873)
+
+[node name="CPUInformation" parent="Game" instance=ExtResource("7_500vr")]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -209.0
+offset_top = 32.0
+offset_right = -35.0
+offset_bottom = 140.0
+grow_horizontal = 0
+player_name = "CPU"
+
+[node name="PlayerInformation" parent="Game" instance=ExtResource("7_500vr")]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 43.0
+offset_top = -133.0
+offset_right = 217.0
+offset_bottom = -25.0
+grow_vertical = 0
+player_name = "Player"
+color = 1
+selected = true
+
+[node name="NewGameButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -312.0
+offset_top = -124.0
+offset_right = -44.0
+offset_bottom = -39.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("1_tfikh")
+text = "New Game"
+
+[node name="Studio" parent="." instance=ExtResource("9_864xk")]
+
+[connection signal="ended" from="Game" to="." method="_on_game_ended"]
+[connection signal="finished" from="Game" to="Game" method="_on_finished"]
+[connection signal="passed" from="Game" to="Game" method="_on_passed"]
+[connection signal="turn_changed" from="Game" to="Game" method="_on_turn_changed"]
+[connection signal="clicked" from="Game/Board" to="Game" method="_on_board_clicked"]
+[connection signal="pressed" from="NewGameButton" to="." method="_on_new_game_button_pressed"]
+
+[editable path="Studio"]

@@ -1,0 +1,193 @@
+= Diagram
+
+.Main
+[plantuml]
+....
+class Main <<Control>> {
+  * ReviewScene
+  ---
+  + new_game( player_color, cpu_level )
+  + store_game_result()
+  + _on_new_game_button_pressed()
+  + _on_game_ended()
+}
+class Game <<Node3D>> {
+  ~ turn_changed
+  ~ passed
+  ~ finished
+  ~ ended
+  ---
+  - MAX_LOCATION_NUMBER
+  * DiskScene
+  * player_as_cpu
+  * current_color
+  * player_color
+  * cpu
+  * animation_disks
+  ---
+  + _ready()
+  + initialize( _player_color, cpu_level )
+  + set_cpu( level )
+  + place( location )
+  + put( location, color )
+  + clear_disks()
+  + get_disks()
+  + get_disk( location )
+  + get_color_count( color )
+  + invalid_place( location, color )
+  + already_placed( location )
+  + out_of_range( location )
+  + placeable_locations( color )
+  + try_reverse_by( disk: Disk )
+  + reversible_count( location, color )
+  + reversible_disks_by( disk: Disk )
+  + directional_locations_from( base )
+  + locations_line_from( base, dx: int, dy: int )
+  + take_turn()
+  + let_cpu_play()
+  + refresh_player_info()
+  + _on_board_clicked( location )
+  + _on_disk_animation_finished( disk )
+  + _on_turn_changed()
+  + _on_passed( _color )
+  + _on_finished()
+}
+class Board <<Node3D>> {
+  ~ clicked
+  ---
+  - DISK_Y_OFFSET
+  - TILE_OFFSET
+  ---
+  + add_disk( disk )
+  + clear_disks()
+  + get_disks()
+  + calc_location( _position )
+  + _input( event )
+}
+class StaticBody <<(C,white)StaticBody3D>> {}
+class CollisionShape <<(C,white)CollisionShape3D>> {
+  * shape
+}
+class Disks <<(C,white)Node3D>> {}
+package "Disk.tscn" as DiskScene {
+  class Disk <<Node3D>> {
+    ~ animation_finished
+    ---
+    - COLOR
+    * mesh
+    * animation
+    * color
+    * location
+    ---
+    + _ready()
+    + change_color( _color )
+    + set_mesh_rotation()
+    + reverse()
+    + _on_player_animation_finished( _anim_name )
+  }
+}
+package "FlashMessage.tscn" as FlashMessageScene {
+  class FlashMessage <<Path3D>> {
+    ~ finished
+    ---
+    * text
+    * progress
+    * TextLabel
+    * callback
+    ---
+    + _ready()
+    + spawn( _text, _callback )
+    + set_text( _text )
+    + set_progress( _progress )
+    + _on_timer_timeout()
+  }
+}
+Package "PlayerInformation.tscn" as PlayerInformationScene1 {
+  class CPUInformation <<PanelContainer>> {
+    * player_name
+    * color
+    * selected
+    * style
+    * default_border_color
+    ---
+    + _ready()
+    + set_player_name( _name )
+    + set_color( _color )
+    + change_selected( _selected )
+    + set_style()
+  }
+}
+Package "PlayerInformation.tscn" as PlayerInformationScene2 {
+  class PlayerInformation <<PanelContainer>> {
+    * player_name
+    * color
+    * selected
+    * style
+    * default_border_color
+    ---
+    + _ready()
+    + set_player_name( _name )
+    + set_color( _color )
+    + change_selected( _selected )
+    + set_style()
+  }
+}
+class NewGameButton <<(C,white)Button>> {
+  ~ pressed
+}
+package "Studio.tscn" as StudioScene {
+  class Studio <<(C,white)Node3D>> {}
+  class Camera3D <<(C,white)Camera3D>> {}
+  class DirectionalLight3D <<(C,white)DirectionalLight3D>> {}
+  class SpotLight3D <<(C,white)SpotLight3D>> {}
+  class WorldEnvironment <<(C,white)WorldEnvironment>> {}
+}
+class CPU <<Node>> {
+  * color
+  * game
+  ---
+  + initialize( _game )
+  + perform()
+  + decide_place()
+  + placeable_moves()
+  + sort_benefit_move( a, b )
+  + benefit_order( move )
+  + is_corner( location )
+}
+class EasyCPU <<CPU>> {
+  + dicide_place()
+}
+class NormalCPU <<CPU>> {
+  + dicide_place()
+}
+class HardCPU <<CPU>> {
+  + dicide_place()
+}
+
+left to right direction
+
+Main --o Game
+Game --o Board
+Board --o StaticBody
+StaticBody --o CollisionShape
+Board --o Disks
+Disks --o Disk
+Game --o FlashMessage
+CPUInformation o-- Main
+PlayerInformation o-- Main
+NewGameButton o-- Main
+Studio o-- Main
+Studio --o Camera3D
+Studio --o DirectionalLight3D
+Studio --o SpotLight3D
+Studio --o WorldEnvironment
+CPU <|-- EasyCPU
+CPU <|-- NormalCPU
+CPU <|-- HardCPU
+
+Main::_on_new_game_button_pressed <-[#blue,thickness=2]- NewGameButton::pressed
+Main::_on_game_ended <-[#blue,thickness=2]- Game::ended
+Game::_on_board_clicked <-[#blue,thickness=2]- Board::clicked
+Game::_on_disk_animation_finished <-[#blue,thickness=2]- Disk::animation_finished
+Game::cpu .. CPU
+....
